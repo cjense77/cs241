@@ -1,7 +1,7 @@
-###########################################################
-# Assignment 02
-# Colin Jensen
-###########################################################
+"""
+Assignment 02
+Colin Jensen
+"""
 
 # Take in a user-supplied filename and return a parsed list
 # of lines from the data file. 
