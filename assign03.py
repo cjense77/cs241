@@ -1,3 +1,14 @@
+"""
+Colin Jensen
+Assignment 03
+
+Create and implement a robot class. Each object in the class
+can move in all four directions, fire, and print out it's
+position and fuel levels. 
+"""
+
+# Define Robot class with members functions to move, fire, and
+# print status.
 class Robot:
     def __init__(self):
         self.x = 10
@@ -29,6 +40,8 @@ class Robot:
                                            self.y,
                                            self.fuel))
 
+# Create a robot object and interpret commands from
+# the user.
 def main():
     robot = Robot()
     
