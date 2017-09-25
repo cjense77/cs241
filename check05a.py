@@ -29,7 +29,7 @@ class Ship:
         self.y = self.y + self.dy
 
     def draw(self):
-        print('Drawing the ship at ({}, {})'.format(self.x,
+        print('Drawing ship at ({}, {})'.format(self.x,
                                                     self.y))
 
 
