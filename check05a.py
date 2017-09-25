@@ -17,6 +17,20 @@ import random
 
 # TODO: Define your Ship class here
 
+class Ship:
+    def __init__(self):
+        self.x = 0
+        self.y = 0
+        self.dx = 0
+        self.dy = 0
+
+    def advance(self):
+        self.x = self.x + self.dx
+        self.y = self.y + self.dy
+
+    def draw(self):
+        print('Drawing the ship at ({}, {})'.format(self.x,
+                                                    self.y))
 
 
 class Game:
@@ -29,10 +43,12 @@ class Game:
 
     def on_draw(self):
         #TODO: Add a call to the draw method of self.ship
+        self.ship.draw()
 
 
     def update(self):
         #TODO: Add a call to the advance method of self.ship
+        self.ship.advance()
 
 
 
