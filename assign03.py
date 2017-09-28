@@ -24,11 +24,11 @@ class Robot:
         self.fuel = self.fuel - 5
         
     def up(self):
-        self.y = self.y + 1
+        self.y = self.y - 1
         self.fuel = self.fuel - 5
         
     def down(self):
-        self.y = self.y - 1
+        self.y = self.y + 1
         self.fuel = self.fuel - 5
         
     def fire(self):

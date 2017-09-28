@@ -33,13 +33,13 @@ class Velocity:
 class Ball:
     def __init__(self):
         self.center = Point(0, random.uniform(0, SCREEN_HEIGHT))
-        self.velocity = Velocity(random.uniform(0, 2), random.uniform(-2, 2))
+        self.velocity = Velocity(random.uniform(0, 4), random.uniform(-4, 4))
 
     def draw(self):
         arcade.draw_circle_filled(self.center.x,
                                   self.center.y,
                                   BALL_RADIUS,
-                                  arcade.color.WHITE)
+                                  arcade.color.BLACK)
 
     def advance(self):
         self.center.x = self.center.x + self.velocity.dx
@@ -59,17 +59,17 @@ class Paddle:
         self.center = Point(SCREEN_WIDTH, SCREEN_HEIGHT / 2)
 
     def draw(self):
-        arcade.draw_line(self.center.x - PADDLE_WIDTH,
-                         self.center.y,
-                         self.center.x,
-                         self.center.y + PADDLE_HEIGHT,
-                         arcade.color.WHITE, 1)
+        arcade.draw_rectangle_filled(self.center.x,
+                                     self.center.y,
+                                     PADDLE_WIDTH,
+                                     PADDLE_HEIGHT,
+                                     arcade.color.BLACK)
 
     def move_up(self):
-        self.center.x = self.center.x + MOVE_AMOUNT
+        self.center.y = self.center.y + MOVE_AMOUNT
 
     def move_down(self):
-        self.center.x = self.center.x - MOVE_AMOUNT
+        self.center.y = self.center.y - MOVE_AMOUNT
 
 
 
