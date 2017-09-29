@@ -44,7 +44,8 @@ class Robot:
 # the user.
 def main():
     robot = Robot()
-    
+
+    # Dictionary storing robot commands
     command_index = {'left': [robot.left, 5],
                      'right': [robot.right, 5],
                      'up': [robot.up, 5],
@@ -55,12 +56,14 @@ def main():
     again = True
     while(again):
         command = input('Enter command: ')
-        if command == 'quit':
+        if command in command_index:
+            if robot.fuel >= command_index[command][1]:
+                command_index[command][0]()
+            else:
+                print('Insufficient fuel to perform action')
+        elif command == 'quit':
             again = False
-        elif robot.fuel >= command_index[command][1]:
-            command_index[command][0]()
-        else:
-            print('Insufficient fuel to perform action')
+
     print('Goodbye.')
 
 if __name__ == "__main__":
