@@ -15,9 +15,9 @@ class Book:
                                      self.author))
 
 class TextBook(Book):
-    super().__init__()
 
     def __init__(self):
+        super().__init__()
         self.subject = ""
 
     def prompt_subject(self):
@@ -28,9 +28,9 @@ class TextBook(Book):
 
 
 class PictureBook(Book):
-    super().__init__()
 
     def __init__(self):
+        super().__init__()
         self.illustrator = ""
 
     def prompt_illustrator(self):
@@ -55,3 +55,6 @@ def main():
     pb1.prompt_illustrator()
     pb1.display()
     pb1.display_illustrator()
+
+if __name__ == "__main__":
+    main()
