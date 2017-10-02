@@ -7,15 +7,19 @@ can move in all four directions, fire, and print out it's
 position and fuel levels. 
 """
 
-# Define Robot class with members functions to move, fire, and
-# print status.
 class Robot:
+    """
+    Define Robot class with members functions to move, fire, and
+    print status.
+    """
+
     def __init__(self):
         self.x = 10
         self.y = 10
         self.fuel = 100
 
     def move(self, dx, dy):
+        # Check to see if we have enough fuel
         if self.fuel >= 5:
             self.fuel -= 5
 
@@ -51,9 +55,11 @@ class Robot:
                                            self.y,
                                            self.fuel))
 
-# Create a robot object and interpret commands from
-# the user.
 def main():
+    """
+    Create a robot object and interpret commands from
+    the user.
+    """
     robot = Robot()
 
     # Dictionary storing robot commands
@@ -66,15 +72,16 @@ def main():
     
     again = True
     while(again):
+
+        # Get command from user
         command = input('Enter command: ')
-        if command == "quit":
-            again = False
-        elif command in command_index:
+
+        # Prevent key errors from bad input, then run command
+        if command in command_index:
             command_index[command]()
-
-
-
-    print('Goodbye.')
+        elif command == "quit":
+            again = False
+            print('Goodbye.')
 
 if __name__ == "__main__":
     main()
