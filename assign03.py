@@ -14,26 +14,37 @@ class Robot:
         self.x = 10
         self.y = 10
         self.fuel = 100
+
+    def move(self, dx, dy):
+        if self.fuel >= 5:
+            self.fuel -= 5
+
+            self.x += dx
+            self.y += dy
+        else:
+            print("Insufficient fuel to perform action")
+
+
     
     def left(self):
-        self.x = self.x - 1
-        self.fuel = self.fuel - 5
+        self.move(-1, 0)
         
     def right(self):
-        self.x = self.x + 1
-        self.fuel = self.fuel - 5
+        self.move(1, 0)
         
     def up(self):
-        self.y = self.y - 1
-        self.fuel = self.fuel - 5
+        self.move(0, -1)
         
     def down(self):
-        self.y = self.y + 1
-        self.fuel = self.fuel - 5
+        self.move(0, 1)
         
     def fire(self):
-        print("Pew! Pew!")
-        self.fuel = self.fuel - 15
+        if self.fuel >= 15:
+            self.fuel -= 15
+            print("Pew! Pew!")
+        else:
+            print("Insufficient fuel to perform action")
+
         
     def status(self):
         print("({}, {}) - Fuel: {}".format(self.x,
@@ -46,23 +57,22 @@ def main():
     robot = Robot()
 
     # Dictionary storing robot commands
-    command_index = {'left': [robot.left, 5],
-                     'right': [robot.right, 5],
-                     'up': [robot.up, 5],
-                     'down': [robot.down, 5],
-                     'status': [robot.status, 0],
-                     'fire': [robot.fire, 15]}
+    command_index = {'left': robot.left,
+                     'right': robot.right,
+                     'up': robot.up,
+                     'down': robot.down,
+                     'status': robot.status,
+                     'fire': robot.fire}
     
     again = True
     while(again):
         command = input('Enter command: ')
-        if command in command_index:
-            if robot.fuel >= command_index[command][1]:
-                command_index[command][0]()
-            else:
-                print('Insufficient fuel to perform action')
-        elif command == 'quit':
+        if command == "quit":
             again = False
+        elif command in command_index:
+            command_index[command]()
+
+
 
     print('Goodbye.')
 

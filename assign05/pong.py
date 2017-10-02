@@ -33,23 +33,46 @@ class Velocity:
 class Ball:
     def __init__(self):
         self.center = Point(0, random.uniform(0, SCREEN_HEIGHT))
-        self.velocity = Velocity(random.uniform(0, 4), random.uniform(-4, 4))
+        self.velocity = Velocity(random.uniform(6, 8), random.uniform(-4, 4))
+        self.start_angle = -45
+        self.end_angle = 45
+        self.mouth_closing = True
 
     def draw(self):
+        arcade.draw_circle_outline(self.center.x,
+                                   self.center.y,
+                                   color=arcade.color.BLACK,
+                                   radius=10)
         arcade.draw_circle_filled(self.center.x,
                                   self.center.y,
-                                  BALL_RADIUS,
-                                  arcade.color.BLACK)
+                                  color=arcade.color.YELLOW,
+                                  radius=9)
+        arcade.draw_circle_filled(self.center.x + 1,
+                                  self.center.y + 4.5,
+                                  radius=1.5,
+                                  color=arcade.color.BLACK)
+        arcade.draw_arc_filled(self.center.x,
+                               self.center.y,
+                               10, 10,
+                               arcade.color.BLACK,
+                               self.start_angle, self.end_angle, 0)
 
     def advance(self):
-        self.center.x = self.center.x + self.velocity.dx
-        self.center.y = self.center.y + self.velocity.dy
+        self.center.x += self.velocity.dx
+        self.center.y += self.velocity.dy
+
+        if self.mouth_closing:
+            self.start_angle += 2
+            self.end_angle -= 2
+        else:
+            self.start_angle -= 2
+            self.end_angle += 2
 
     def bounce_horizontal(self):
-        self.velocity.dx = self.velocity.dx * -1
+        self.velocity.dx *= -1
 
     def bounce_vertical(self):
-        self.velocity.dy = self.velocity.dy * -1
+        self.velocity.dy *= -1
 
     def restart(self):
         self.__init__()
@@ -63,13 +86,15 @@ class Paddle:
                                      self.center.y,
                                      PADDLE_WIDTH,
                                      PADDLE_HEIGHT,
-                                     arcade.color.BLACK)
+                                     arcade.color.WHITE)
 
     def move_up(self):
-        self.center.y = self.center.y + MOVE_AMOUNT
+        if self.center.y < (SCREEN_HEIGHT - PADDLE_HEIGHT/2):
+            self.center.y += MOVE_AMOUNT
 
     def move_down(self):
-        self.center.y = self.center.y - MOVE_AMOUNT
+        if self.center.y > (PADDLE_HEIGHT/2):
+            self.center.y -= MOVE_AMOUNT
 
 
 
@@ -104,7 +129,7 @@ class Pong(arcade.Window):
         self.holding_left = False
         self.holding_right = False
 
-        arcade.set_background_color(arcade.color.WHITE)
+        arcade.set_background_color(arcade.color.BLACK)
 
     def on_draw(self):
         """
@@ -128,7 +153,7 @@ class Pong(arcade.Window):
         score_text = "Score: {}".format(self.score)
         start_x = 10
         start_y = SCREEN_HEIGHT - 20
-        arcade.draw_text(score_text, start_x=start_x, start_y=start_y, font_size=12, color=arcade.color.NAVY_BLUE)
+        arcade.draw_text(score_text, start_x=start_x, start_y=start_y, font_size=12, color=arcade.color.SKY_BLUE)
 
     def update(self, delta_time):
         """
@@ -137,7 +162,12 @@ class Pong(arcade.Window):
         """
 
         # Move the ball forward one element in time
+        if self.ball.start_angle >= 0:
+            self.ball.mouth_closing = False
+        elif self.ball.start_angle < -45:
+            self.ball.mouth_closing = True
         self.ball.advance()
+
 
         # Check to see if keys are being held, and then
         # take appropriate action
