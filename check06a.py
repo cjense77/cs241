@@ -10,7 +10,7 @@ class Book:
         self.publication_year = input("Publication Year: ")
 
     def display(self):
-        print("{} ({}) by {}".format(self.title,
+        print("\n{} ({}) by {}".format(self.title,
                                      self.publication_year,
                                      self.author))
 
@@ -43,18 +43,21 @@ def main():
     b1 = Book()
     b1.prompt_book_info()
     b1.display()
+    print()
 
     tb1 = TextBook()
     tb1.prompt_book_info()
     tb1.prompt_subject()
     tb1.display()
     tb1.display_subject()
+    print()
 
     pb1 = PictureBook()
     pb1.prompt_book_info()
     pb1.prompt_illustrator()
     pb1.display()
     pb1.display_illustrator()
+    print()
 
 if __name__ == "__main__":
     main()
