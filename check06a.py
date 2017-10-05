@@ -37,7 +37,7 @@ class PictureBook(Book):
         self.illustrator = input("Illustrator: ")
 
     def display_illustrator(self):
-        print("Illustrated by: {}".format(self.illustrator))
+        print("Illustrated by {}".format(self.illustrator))
 
 def main():
     b1 = Book()
