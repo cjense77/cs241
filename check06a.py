@@ -57,6 +57,6 @@ def main():
     pb1.prompt_illustrator()
     pb1.display()
     pb1.display_illustrator()
-    
+
 if __name__ == "__main__":
     main()
