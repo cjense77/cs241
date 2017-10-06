@@ -25,7 +25,7 @@ class SmartPhone(Phone):
 
     def display(self):
         super().dipslay()
-        print("Email: {}".format(self.email))
+        print("{}".format(self.email))
 
 
 def main():
