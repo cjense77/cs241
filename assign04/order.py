@@ -1,4 +1,10 @@
-from product import Product
+"""
+File: order.py
+Author: Colin Jensen
+
+This file supplies an Order class with various methods
+and member variables handle a customer's order.
+"""
 
 class Order:
     def __init__(self):
