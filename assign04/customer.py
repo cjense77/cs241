@@ -23,7 +23,7 @@ class Customer:
                                                        self.get_total()))
 
     def display_receipts(self):
-        print('Detailed receipts for customer \'{}\''.format(self.id))
+        print('Detailed receipts for customer \'{}\':'.format(self.id))
         print('Name: '.format(self.name))
         for order in self.orders:
             order.display_receipt()

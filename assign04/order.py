@@ -18,7 +18,7 @@ class Order:
         self.products.append(product)
 
     def display_receipt(self):
-        print('\nOrder: {}'.format(self.id))
+        print('Order: {}'.format(self.id))
         for product in self.products:
             product.display()
         print('Subtotal: ${:.2f}\nTax: ${:.2f}\nTotal: ${:.2f}'.format(self.get_subtotal(),
