@@ -11,4 +11,4 @@ class Product:
     def display(self):
         print('{} ({}) - ${:.2f}'.format(self.name,
                                      self.quantity,
-                                     self.price))
+                                     self.price * self.quantity))
