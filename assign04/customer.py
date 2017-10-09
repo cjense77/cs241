@@ -24,6 +24,7 @@ class Customer:
 
     def display_receipts(self):
         print('Detailed receipts for customer \'{}\':'.format(self.id))
-        print('Name: '.format(self.name))
+        print('Name: {}'.format(self.name))
         for order in self.orders:
+            print()
             order.display_receipt()
