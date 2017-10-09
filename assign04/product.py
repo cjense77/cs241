@@ -9,6 +9,6 @@ class Product:
         return self.price * self.quantity
 
     def display(self):
-        print('{} ({}) - ${}'.format(self.name,
+        print('{} ({}) - ${:.2f}'.format(self.name,
                                      self.quantity,
                                      self.price))

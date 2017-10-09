@@ -17,7 +17,7 @@ class Customer:
 
     def display_summary(self):
         print('Summary for customer \'{}\':\n'
-              'Name: {}\nOrders: {}\nTotal: ${}'.format(self.id,
+              'Name: {}\nOrders: {}\nTotal: ${:.2f}'.format(self.id,
                                                        self.name,
                                                        self.get_order_count(),
                                                        self.get_total()))

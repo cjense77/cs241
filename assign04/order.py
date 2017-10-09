@@ -21,6 +21,6 @@ class Order:
         print('\nOrder: {}'.format(self.id))
         for product in self.products:
             product.display()
-        print('Subtotal: ${}\nTax: ${}\nTotal: ${}'.format(self.get_subtotal(),
+        print('Subtotal: ${:.2f}\nTax: ${:.2f}\nTotal: ${:.2f}'.format(self.get_subtotal(),
                                                         self.get_tax(),
                                                         self.get_total()))
