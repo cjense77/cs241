@@ -33,7 +33,7 @@ class Velocity:
 class Ball:
     def __init__(self):
         self.center = Point(0, random.uniform(0, SCREEN_HEIGHT))
-        self.velocity = Velocity(random.uniform(6, 8), random.uniform(-4, 4))
+        self.velocity = Velocity(random.uniform(4, 5), random.uniform(-4, 4))
         self.start_angle = -45
         self.end_angle = 45
         self.mouth_closing = True
