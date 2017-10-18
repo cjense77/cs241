@@ -8,6 +8,8 @@ import arcade
 import math
 import random
 from rifle import Rifle
+from bullet import Bullet
+from target import Target
 
 # These are Global constants to use throughout the game
 SCREEN_WIDTH = 600
@@ -21,10 +23,6 @@ TARGET_RADIUS = 20
 TARGET_COLOR = arcade.color.CARROT_ORANGE
 TARGET_SAFE_COLOR = arcade.color.AIR_FORCE_BLUE
 TARGET_SAFE_RADIUS = 15
-
-RIFLE_WIDTH = 100
-RIFLE_HEIGHT = 20
-RIFLE_COLOR = arcade.color.DARK_RED
 
 class Game(arcade.Window):
     """
@@ -56,6 +54,7 @@ class Game(arcade.Window):
         self.bullets = []
 
         # TODO: Create a list for your targets (similar to the above bullets)
+        self.targets = []
 
 
         arcade.set_background_color(arcade.color.WHITE)
@@ -76,6 +75,8 @@ class Game(arcade.Window):
             bullet.draw()
 
         # TODO: iterate through your targets and draw them...
+        for target in self.targets:
+            target.draw()
 
 
         self.draw_score()
@@ -105,6 +106,8 @@ class Game(arcade.Window):
             bullet.advance()
 
         # TODO: Iterate through your targets and tell them to advance
+        for target in self.targets:
+            target.advance()
 
     def create_target(self):
         """
@@ -113,6 +116,10 @@ class Game(arcade.Window):
         """
 
         # TODO: Decide what type of target to create and append it to the list
+        target = Target(screen_height=SCREEN_HEIGHT)
+
+        self.targets.append(target)
+
 
     def check_collisions(self):
         """
@@ -134,6 +141,7 @@ class Game(arcade.Window):
                                 abs(bullet.center.y - target.center.y) < too_close):
                         # its a hit!
                         bullet.alive = False
+                        target.alive = False
                         self.score += target.hit()
 
                         # We will wait to remove the dead objects until after we

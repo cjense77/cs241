@@ -1,6 +1,10 @@
 import arcade
 from point import Point
 
+RIFLE_WIDTH = 100
+RIFLE_HEIGHT = 20
+RIFLE_COLOR = arcade.color.DARK_RED
+
 class Rifle:
     """
     The rifle is a rectangle that tracks the mouse.

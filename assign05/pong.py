@@ -1,6 +1,7 @@
 """
 File: pong.py
 Original Author: Br. Burton
+Modified by: Colin Jensen
 Designed to be completed by others
 This program implements a simplistic version of the
 classic Pong arcade game.
@@ -21,24 +22,48 @@ SCORE_HIT = 1
 SCORE_MISS = 5
 
 class Point:
+    """
+    This class stores an x and y coordinate for an object
+    on the game screen.
+    """
+
     def __init__(self, x, y):
         self.x = x
         self.y = y
 
 class Velocity:
+    """
+    This class stores an x and y velocity for a moving
+    object.
+    """
+
     def __init__(self, dx, dy):
         self.dx = dx
         self.dy = dy
 
 class Ball:
+    """
+    This class implements a Pong ball. It will look like a
+    classic Pac-Man.
+    """
+
     def __init__(self):
+        """
+        Sets up a Pong ball
+        """
+
         self.center = Point(0, random.uniform(0, SCREEN_HEIGHT))
-        self.velocity = Velocity(random.uniform(4, 5), random.uniform(-4, 4))
+        self.velocity = Velocity(random.uniform(4, 5),
+                                 random.choice([random.uniform(-4, -1), random.uniform(1,4)]))
         self.start_angle = -45
         self.end_angle = 45
         self.mouth_closing = True
 
     def draw(self):
+        """
+        Draw the Pong ball to look like Pac-Man
+        :return:
+        """
         arcade.draw_circle_outline(self.center.x,
                                    self.center.y,
                                    color=arcade.color.BLACK,
@@ -58,20 +83,35 @@ class Ball:
                                self.start_angle, self.end_angle, 0)
 
     def advance(self):
+        """
+        Update the ball's appearance and position
+        :return:
+        """
         self.center.x += self.velocity.dx
         self.center.y += self.velocity.dy
 
+        # Close the mouth
         if self.mouth_closing:
             self.start_angle += 2
             self.end_angle -= 2
+
+        # Open the mouth
         else:
             self.start_angle -= 2
             self.end_angle += 2
 
     def bounce_horizontal(self):
+        """
+        Change the ball's horizontal direction.
+        :return:
+        """
         self.velocity.dx *= -1
 
     def bounce_vertical(self):
+        """
+        Change the ball's vertical direction.
+        :return:
+        """
         self.velocity.dy *= -1
 
     def restart(self):
@@ -79,9 +119,16 @@ class Ball:
 
 class Paddle:
     def __init__(self):
+        """
+        Sets up a Pong paddle
+        """
         self.center = Point(SCREEN_WIDTH, SCREEN_HEIGHT / 2)
 
     def draw(self):
+        """
+        Draw the Pong paddle
+        :return:
+        """
         arcade.draw_rectangle_filled(self.center.x,
                                      self.center.y,
                                      PADDLE_WIDTH,
@@ -89,10 +136,17 @@ class Paddle:
                                      arcade.color.WHITE)
 
     def move_up(self):
+        """
+        Move the paddle up if we're still on the screen
+        :return:
+        """
         if self.center.y < (SCREEN_HEIGHT - PADDLE_HEIGHT/2):
             self.center.y += MOVE_AMOUNT
 
     def move_down(self):
+        """
+        Move the paddle down if we're still on the screen
+        """
         if self.center.y > (PADDLE_HEIGHT/2):
             self.center.y -= MOVE_AMOUNT
 
