@@ -49,7 +49,7 @@ class Ferrari(Car):
 # It should not be a member function of any class,
 # but rather just a "regular" function.
 def attach_doors(car):
-    print("Attaching doors to {} = {}".format(car.name,
+    print("Attaching doors to {} - {}".format(car.name,
                                               car.get_door_specs()))
 
 def main():
