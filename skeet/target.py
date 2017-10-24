@@ -3,7 +3,7 @@ import arcade
 import random as rd
 
 class Target(FlyingObject):
-    def __init__(self, radius = 10, alive = True, screen_height = 500):
+    def __init__(self, radius = 20, alive = True, screen_height = 500):
         super().__init__(x=0, y=rd.uniform(screen_height/2, screen_height),
                          dx=rd.uniform(1,5), dy=rd.uniform(-2,5))
         self.radius = radius
