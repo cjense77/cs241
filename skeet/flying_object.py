@@ -1,4 +1,3 @@
-import arcade
 from point import Point
 from velocity import Velocity
 

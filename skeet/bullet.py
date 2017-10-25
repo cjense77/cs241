@@ -1,4 +1,4 @@
-from flying_object import *
+from flying_object import FlyingObject
 import arcade
 import math
 
@@ -8,7 +8,7 @@ BULLET_SPEED = 10
 
 class Bullet(FlyingObject):
     def __init__(self):
-        super().__init__(dx = BULLET_SPEED, dy = BULLET_SPEED)
+        super().__init__(dx=BULLET_SPEED, dy=BULLET_SPEED)
         self.radius = BULLET_RADIUS
         self.alive = True
 
@@ -32,5 +32,5 @@ class Bullet(FlyingObject):
 
     def fire(self, angle):
         angle = math.radians(angle)
-        self.velocity.dx = BULLET_SPEED / (1+math.tan(angle))
-        self.velocity.dy = BULLET_SPEED - self.velocity.dx
+        self.velocity.dx = BULLET_SPEED * math.cos(angle)
+        self.velocity.dy = BULLET_SPEED * math.sin(angle)
