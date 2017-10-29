@@ -9,20 +9,13 @@ import math
 import random
 from rifle import Rifle
 from bullet import Bullet
-from target import Target
+from missile import Missile
+from target import *
 
 # These are Global constants to use throughout the game
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 500
 
-BULLET_RADIUS = 3
-BULLET_COLOR = arcade.color.BLACK_OLIVE
-BULLET_SPEED = 10
-
-TARGET_RADIUS = 20
-TARGET_COLOR = arcade.color.CARROT_ORANGE
-TARGET_SAFE_COLOR = arcade.color.AIR_FORCE_BLUE
-TARGET_SAFE_RADIUS = 15
 
 class Game(arcade.Window):
     """
@@ -53,9 +46,10 @@ class Game(arcade.Window):
 
         self.bullets = []
 
-        # TODO: Create a list for your targets (similar to the above bullets)
+        # Create a list for targets
         self.targets = []
 
+        self.missiles = []
 
         arcade.set_background_color(arcade.color.WHITE)
 
@@ -74,10 +68,12 @@ class Game(arcade.Window):
         for bullet in self.bullets:
             bullet.draw()
 
-        # TODO: iterate through your targets and draw them...
+        # Iterate through the targets and draw them
         for target in self.targets:
             target.draw()
 
+        for missile in self.missiles:
+            missile.draw()
 
         self.draw_score()
 
@@ -105,9 +101,12 @@ class Game(arcade.Window):
         for bullet in self.bullets:
             bullet.advance()
 
-        # TODO: Iterate through your targets and tell them to advance
+        # Iterate through targets and tell them to advance
         for target in self.targets:
             target.advance()
+
+        for missile in self.missiles:
+            missile.advance()
 
     def create_target(self):
         """
@@ -115,11 +114,13 @@ class Game(arcade.Window):
         :return:
         """
 
-        # TODO: Decide what type of target to create and append it to the list
-        target = Target(screen_height=SCREEN_HEIGHT)
+        # List of possible target types
+        target_type = [NormalTarget, SafeTarget, StrongTarget]
+
+        # Choose a type of target at random and create it
+        target = random.choice(target_type)(screen_height=SCREEN_HEIGHT)
 
         self.targets.append(target)
-
 
     def check_collisions(self):
         """
@@ -138,11 +139,23 @@ class Game(arcade.Window):
                     too_close = bullet.radius + target.radius
 
                     if (abs(bullet.center.x - target.center.x) < too_close and
-                                abs(bullet.center.y - target.center.y) < too_close):
+                        abs(bullet.center.y - target.center.y) < too_close):
                         # its a hit!
                         bullet.alive = False
-                        target.alive = False
                         self.score += target.hit()
+
+            for missile in self.missiles:
+                for target in self.targets:
+
+                    # Make sure they are both alive before checking for a collision
+                    if missile.alive and target.alive:
+                        too_close = missile.radius + target.radius
+
+                        if (abs(missile.center.x - target.center.x) < too_close and
+                                    abs(missile.center.y - target.center.y) < too_close):
+                            # its a hit!
+                            missile.alive = False
+                            self.score += target.hit()
 
                         # We will wait to remove the dead objects until after we
                         # finish going through the list
@@ -163,6 +176,10 @@ class Game(arcade.Window):
             if not target.alive:
                 self.targets.remove(target)
 
+        for missile in self.missiles:
+            if not missile.alive:
+                self.missiles.remove(missile)
+
     def check_off_screen(self):
         """
         Checks to see if bullets or targets have left the screen
@@ -177,6 +194,10 @@ class Game(arcade.Window):
             if target.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT):
                 self.targets.remove(target)
 
+        for missile in self.missiles:
+            if missile.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT):
+                self.missiles.remove(missile)
+
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         # set the rifle angle in degrees
         self.rifle.angle = self._get_angle_degrees(x, y)
@@ -185,10 +206,14 @@ class Game(arcade.Window):
         # Fire!
         angle = self._get_angle_degrees(x, y)
 
-        bullet = Bullet()
-        bullet.fire(angle)
-
-        self.bullets.append(bullet)
+        if modifiers == arcade.key.MOD_SHIFT:
+            missile = Missile()
+            missile.fire(angle)
+            self.missiles.append(missile)
+        else:
+            bullet = Bullet()
+            bullet.fire(angle)
+            self.bullets.append(bullet)
 
     def _get_angle_degrees(self, x, y):
         """
