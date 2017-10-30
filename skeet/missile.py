@@ -10,19 +10,32 @@ class Missile(FlyingObject):
         super().__init__()
         self.alive = True
         self.radius = MISSILE_RADIUS
+        self.tilt = 0
+        self.speed = MISSILE_SPEED
 
     def draw(self):
         arcade.draw_parabola_filled(self.center.x,
                                     self.center.y,
                                     self.center.x + 5,
                                     self.radius,
-                                    arcade.color.RED_DEVIL)
+                                    arcade.color.RED_DEVIL,
+                                    self.tilt)
+
+    def heat_seek_mode(self, prey, distance):
+        super().advance()
+        angle = math.degrees(math.atan2(prey.center.y, prey.center.x))
+        self.fire(angle)
+        self.speed = -0.025*distance + 20
+
+
+
     def fire(self, angle):
         """
         Define the correct direction for a bullet based on the given angle
         :param angle:
         :return:
         """
+        self.tilt = angle - 90
         angle = math.radians(angle)
-        self.velocity.dx = MISSILE_SPEED * math.cos(angle)
-        self.velocity.dy = MISSILE_SPEED * math.sin(angle)
+        self.velocity.dx = self.speed * math.cos(angle)
+        self.velocity.dy = self.speed * math.sin(angle)

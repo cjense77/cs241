@@ -76,6 +76,7 @@ class Game(arcade.Window):
             missile.draw()
 
         self.draw_score()
+        self.draw_instructions()
 
     def draw_score(self):
         """
@@ -85,6 +86,12 @@ class Game(arcade.Window):
         start_x = 10
         start_y = SCREEN_HEIGHT - 20
         arcade.draw_text(score_text, start_x=start_x, start_y=start_y, font_size=12, color=arcade.color.NAVY_BLUE)
+
+    def draw_instructions(self):
+        instruction_text = 'HOLD SHIFT TO DEPLOY HEAT-SEEKING MISSILE!'
+        start_x = SCREEN_WIDTH / 4
+        start_y = SCREEN_HEIGHT - 20
+        arcade.draw_text(instruction_text, start_x=start_x, start_y=start_y, font_size=12, color=arcade.color.NAVY_BLUE)
 
     def update(self, delta_time):
         """
@@ -106,7 +113,14 @@ class Game(arcade.Window):
             target.advance()
 
         for missile in self.missiles:
-            missile.advance()
+            # If targets are present, hunt them down. Otherwise act like a regular bullet.
+            if len(self.targets) > 0:
+                distances = [self._get_distance_between_points(missile, target) for target in self.targets]
+                prey_index = distances.index(min(distances))
+                prey = self.targets[prey_index]
+                missile.heat_seek_mode(prey, min(distances))
+            else:
+                missile.advance()
 
     def create_target(self):
         """
@@ -144,18 +158,18 @@ class Game(arcade.Window):
                         bullet.alive = False
                         self.score += target.hit()
 
-            for missile in self.missiles:
-                for target in self.targets:
+        for missile in self.missiles:
+            for target in self.targets:
 
-                    # Make sure they are both alive before checking for a collision
-                    if missile.alive and target.alive:
-                        too_close = missile.radius + target.radius
+                # Make sure they are both alive before checking for a collision
+                if missile.alive and target.alive:
+                    too_close = missile.radius + target.radius
 
-                        if (abs(missile.center.x - target.center.x) < too_close and
-                                    abs(missile.center.y - target.center.y) < too_close):
-                            # its a hit!
-                            missile.alive = False
-                            self.score += target.hit()
+                    if (abs(missile.center.x - target.center.x) < too_close and
+                                abs(missile.center.y - target.center.y) < too_close):
+                        # its a hit!
+                        missile.alive = False
+                        self.score += target.hit()
 
                         # We will wait to remove the dead objects until after we
                         # finish going through the list
@@ -229,6 +243,17 @@ class Game(arcade.Window):
         angle_degrees = math.degrees(angle_radians)
 
         return angle_degrees
+
+    def _get_distance_between_points(self, p1, p2):
+        """
+        Return the Cartesian distance between two object with
+        x and y coordinates.
+        :param p1:
+        :param p2:
+        :return:
+        """
+        return math.sqrt((p2.center.x - p1.center.x)**2 +
+                         (p2.center.y - p1.center.y)**2)
 
 # Creates the game and starts it going
 window = Game(SCREEN_WIDTH, SCREEN_HEIGHT)
