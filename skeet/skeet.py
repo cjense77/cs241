@@ -114,7 +114,11 @@ class Game(arcade.Window):
 
         for missile in self.missiles:
             # If targets are present, hunt them down. Otherwise act like a regular bullet.
-            if len(self.targets) > 0:
+            # Only applies after the missile has left the end of the rifle
+            if (len(self.targets) > 0 and
+                missile.center.x > 50 and
+                missile.center.y > 50):
+
                 distances = [self._get_distance_between_points(missile, target) for target in self.targets]
                 prey_index = distances.index(min(distances))
                 prey = self.targets[prey_index]
