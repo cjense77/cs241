@@ -1,5 +1,3 @@
-import numpy as np
-
 class GPA:
     def __init__(self):
         self.gpa = 0.0
