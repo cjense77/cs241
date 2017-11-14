@@ -15,7 +15,7 @@ BULLET_LIFE = 60
 
 class Bullet(FlyingObject):
     """
-    Class for a bullet in skeet shooting game
+    Class for a bullet in a shooting game
     """
     def __init__(self, x=0, y=0, dx=0, dy=0, angle=0):
         """
@@ -32,7 +32,7 @@ class Bullet(FlyingObject):
 
     def draw(self):
         """
-        Draw a bullet as a filled circle
+        Draw a bullet from an image file
         :return:
         """
         image = 'images/laserBlue01.png'
@@ -48,6 +48,13 @@ class Bullet(FlyingObject):
                                       texture,
                                       self.angle)
 
+    def advance(self, screen_width, screen_height):
+        super().advance(screen_width, screen_height)
+
+        self.life -= 1
+        if self.life < 1:
+            self.kill()
+
     def fire(self, angle):
         """
         Define the correct direction for a bullet based on the given angle
@@ -57,3 +64,6 @@ class Bullet(FlyingObject):
         angle = math.radians(angle)
         self.velocity.dx = BULLET_SPEED * math.cos(angle)
         self.velocity.dy = BULLET_SPEED * math.sin(angle)
+
+    def kill(self):
+        self.alive = False

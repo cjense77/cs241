@@ -1,5 +1,6 @@
 from flying_object import FlyingObject
 import arcade
+import math
 
 SHIP_TURN_AMOUNT = 3
 SHIP_THRUST_AMOUNT = 0.25
@@ -11,6 +12,7 @@ class Ship(FlyingObject):
         super().__init__(x=screen_width/2,
                          y=screen_height/2,
                          dx=0, dy=0,
+                         angle=90,
                          radius=SHIP_RADIUS)
 
     def draw(self):
@@ -25,4 +27,14 @@ class Ship(FlyingObject):
                                       width,
                                       height,
                                       texture,
-                                      self.angle)
+                                      self.angle - 90)
+
+    def apply_thrust(self):
+        #self.velocity.dx += SHIP_THRUST_AMOUNT
+        #self.velocity.dy += SHIP_THRUST_AMOUNT
+
+        self.velocity.dx += SHIP_THRUST_AMOUNT * math.cos(math.radians(self.angle))
+        self.velocity.dy += SHIP_THRUST_AMOUNT * math.sin(math.radians(self.angle))
+
+    def turn(self, direction):
+        self.angle += direction * SHIP_TURN_AMOUNT

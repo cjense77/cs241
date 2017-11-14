@@ -17,8 +17,6 @@ SCREEN_HEIGHT = 600
 INITIAL_ROCK_COUNT = 5
 
 
-
-
 class Game(arcade.Window):
     """
     This class handles all the game callbacks and interaction
@@ -78,6 +76,12 @@ class Game(arcade.Window):
             bullet.advance(SCREEN_WIDTH, SCREEN_HEIGHT)
 
         # TODO: Check for collisions
+        self.clear_zombies()
+
+    def clear_zombies(self):
+        for bullet in self.bullets:
+            if not bullet.alive:
+                self.bullets.remove(bullet)
 
     def check_keys(self):
         """
@@ -85,13 +89,13 @@ class Game(arcade.Window):
         You will need to put your own method calls in here.
         """
         if arcade.key.LEFT in self.held_keys:
-            pass
+            self.ship.turn(1)
 
         if arcade.key.RIGHT in self.held_keys:
-            pass
+            self.ship.turn(-1)
 
         if arcade.key.UP in self.held_keys:
-            pass
+            self.ship.apply_thrust()
 
         if arcade.key.DOWN in self.held_keys:
             pass

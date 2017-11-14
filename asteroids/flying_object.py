@@ -62,7 +62,10 @@ class FlyingObject(ABC):
 
     @angle.setter
     def angle(self, new_val):
-        self._angle = new_val
+        if not 0 < new_val < 360:
+            self._angle = new_val % 360
+        else:
+            self._angle = new_val
 
     @alive.setter
     def alive(self, new_val):

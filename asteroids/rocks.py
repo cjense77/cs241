@@ -28,6 +28,7 @@ class Rock(FlyingObject):
     def draw(self):
         pass
 
+
 class BigRock(Rock):
     def __init__(self, screen_width, screen_height):
         super().__init__(x=random.uniform(0, screen_width),
