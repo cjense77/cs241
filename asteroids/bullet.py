@@ -22,13 +22,12 @@ class Bullet(FlyingObject):
         Initialize bullet
         """
         super().__init__(x=x, y=y,
-                         dx=dx + BULLET_SPEED,
-                         dy=dy + BULLET_SPEED,
+                         dx=dx, dy=dy,
                          radius=BULLET_RADIUS,
                          angle=angle)
         self.life = BULLET_LIFE
 
-        self.fire(angle)
+        self.fire()
 
     def draw(self):
         """
@@ -55,15 +54,15 @@ class Bullet(FlyingObject):
         if self.life < 1:
             self.kill()
 
-    def fire(self, angle):
+    def fire(self):
         """
         Define the correct direction for a bullet based on the given angle
-        :param angle:
         :return:
         """
-        angle = math.radians(angle)
-        self.velocity.dx = BULLET_SPEED * math.cos(angle)
-        self.velocity.dy = BULLET_SPEED * math.sin(angle)
+        angle = math.radians(self.angle)
+
+        self.velocity.dx += BULLET_SPEED * math.cos(angle)
+        self.velocity.dy += BULLET_SPEED * math.sin(angle)
 
     def kill(self):
         self.alive = False

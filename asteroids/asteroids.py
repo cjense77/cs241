@@ -115,11 +115,11 @@ class Game(arcade.Window):
 
             if key == arcade.key.SPACE:
                 # TODO: Fire the bullet here!
-                bullet = Bullet(self.ship.center.x,
-                                self.ship.center.y,
-                                self.ship.velocity.dx,
-                                self.ship.velocity.dy,
-                                self.ship.angle)
+                bullet = Bullet(x=self.ship.center.x,
+                                y=self.ship.center.y,
+                                dx=self.ship.velocity.dx,
+                                dy=self.ship.velocity.dy,
+                                angle=self.ship.angle)
                 self.bullets.append(bullet)
 
     def on_key_release(self, key: int, modifiers: int):
