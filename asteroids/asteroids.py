@@ -8,6 +8,8 @@ import arcade
 from bullet import Bullet
 from ship import Ship
 from rocks import *
+from point import Point
+from velocity import Velocity
 
 
 # These are Global constants to use throughout the game
@@ -51,7 +53,8 @@ class Game(arcade.Window):
         arcade.start_render()
 
         # TODO: draw each object
-        self.ship.draw()
+        if self.ship.alive:
+            self.ship.draw()
 
         for rock in self.rocks:
             rock.draw()
@@ -76,12 +79,39 @@ class Game(arcade.Window):
             bullet.advance(SCREEN_WIDTH, SCREEN_HEIGHT)
 
         # TODO: Check for collisions
+        self.check_collision()
         self.clear_zombies()
+
+    def check_collision(self):
+        for rock in self.rocks:
+            if self._has_collided(rock, self.ship):
+                self.ship.kill()
+                debris = rock.break_apart()
+                self.rocks.extend(debris)
+
+            for bullet in self.bullets:
+                if self._has_collided(rock, bullet):
+                    debris = rock.break_apart()
+                    self.rocks.extend(debris)
+                    bullet.kill()
+
+    def _has_collided(self, obj1, obj2):
+        if obj1.alive and obj2.alive:
+            too_close = obj1.radius + obj2.radius
+
+            if (abs(obj1.center.x - obj2.center.x) < too_close and
+                        abs(obj1.center.y - obj2.center.y) < too_close):
+                # its a hit!
+                return True
+        return False
 
     def clear_zombies(self):
         for bullet in self.bullets:
             if not bullet.alive:
                 self.bullets.remove(bullet)
+        for rock in self.rocks:
+            if not rock.alive:
+                self.rocks.remove(rock)
 
     def check_keys(self):
         """
@@ -98,7 +128,7 @@ class Game(arcade.Window):
             self.ship.apply_thrust()
 
         if arcade.key.DOWN in self.held_keys:
-            pass
+            self.ship.apply_thrust(-1)
 
         # Machine gun mode...
         #if arcade.key.SPACE in self.held_keys:
@@ -115,10 +145,8 @@ class Game(arcade.Window):
 
             if key == arcade.key.SPACE:
                 # TODO: Fire the bullet here!
-                bullet = Bullet(x=self.ship.center.x,
-                                y=self.ship.center.y,
-                                dx=self.ship.velocity.dx,
-                                dy=self.ship.velocity.dy,
+                bullet = Bullet(Point(x=self.ship.center.x, y=self.ship.center.y),
+                                Velocity(dx=self.ship.velocity.dx, dy=self.ship.velocity.dy),
                                 angle=self.ship.angle)
                 self.bullets.append(bullet)
 

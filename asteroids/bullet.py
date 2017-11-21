@@ -17,14 +17,11 @@ class Bullet(FlyingObject):
     """
     Class for a bullet in a shooting game
     """
-    def __init__(self, x=0, y=0, dx=0, dy=0, angle=0):
+    def __init__(self, center, velocity, angle=0):
         """
         Initialize bullet
         """
-        super().__init__(x=x, y=y,
-                         dx=dx, dy=dy,
-                         radius=BULLET_RADIUS,
-                         angle=angle)
+        super().__init__(center=center, velocity=velocity, angle=angle)
         self.life = BULLET_LIFE
 
         self.fire()
@@ -63,6 +60,3 @@ class Bullet(FlyingObject):
 
         self.velocity.dx += BULLET_SPEED * math.cos(angle)
         self.velocity.dy += BULLET_SPEED * math.sin(angle)
-
-    def kill(self):
-        self.alive = False

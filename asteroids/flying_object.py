@@ -14,7 +14,7 @@ class FlyingObject(ABC):
     """
     Define an abstract flying object
     """
-    def __init__(self, x=0, y=0, dx=1, dy=1, da=0, radius=10, angle=0):
+    def __init__(self, center=Point(), velocity=Velocity(), radius=10, angle=0):
         """
         Initialize flying object
         :param x:
@@ -22,8 +22,8 @@ class FlyingObject(ABC):
         :param dx:
         :param dy:
         """
-        self._center = Point(x, y)
-        self._velocity = Velocity(dx, dy, da)
+        self._center = center
+        self._velocity = velocity
         self._radius = radius
         self._angle = angle
         self._alive = True
@@ -107,6 +107,9 @@ class FlyingObject(ABC):
                 self.center.y = screen_height
             elif self.center.y > screen_height:
                 self.center.y = 0
+
+    def kill(self):
+        self.alive = False
 
     @abstractmethod
     def draw(self):
