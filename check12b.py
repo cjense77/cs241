@@ -16,7 +16,7 @@ def get_part1_list():
 
     # TODO: Write a line here that uses filter and a lambda function to filter
     # the list so that it only contains even numbers greater than 33.
-    new_numbers = list(filter(lambda x: x > 33, numbers))
+    new_numbers = list(filter(lambda x: x > 33 and x % 2 == 0, numbers))
 
 
     return new_numbers
