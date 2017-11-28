@@ -6,6 +6,7 @@ This program implements the asteroids game.
 """
 import arcade
 from bullet import Bullet
+from death_blossom import DeathBlossom
 from ship import Ship
 from rocks import *
 from point import Point
@@ -15,6 +16,8 @@ from velocity import Velocity
 # These are Global constants to use throughout the game
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
+
+DEATH_BLOSSOM_REQUIRED_SCORE = 5
 
 INITIAL_ROCK_COUNT = 5
 
@@ -42,6 +45,7 @@ class Game(arcade.Window):
         self.ship = Ship(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.rocks = [BigRock(SCREEN_WIDTH, SCREEN_HEIGHT) for i in range(5)]
         self.bullets = []
+        self.score = 0
 
     def on_draw(self):
         """
@@ -61,6 +65,9 @@ class Game(arcade.Window):
 
         for bullet in self.bullets:
             bullet.draw()
+
+        self.draw_score()
+        self.draw_instructions()
 
     def update(self, delta_time):
         """
@@ -82,7 +89,39 @@ class Game(arcade.Window):
         self.check_collision()
         self.clear_zombies()
 
+    def draw_score(self):
+        """
+        Puts the current score on the screen
+        """
+        score_text = "Score: {}".format(self.score)
+        start_x = 10
+        start_y = SCREEN_HEIGHT - 20
+        arcade.draw_text(score_text, start_x=start_x, start_y=start_y, font_size=12, color=arcade.color.WHITE_SMOKE)
+
+    def draw_instructions(self):
+        """
+        Display instructions for user on the screen
+        :return:
+        """
+        if not self.ship.alive:
+            instruction_text = 'GAME OVER!'
+        elif len(self.rocks) < 1:
+            instruction_text = 'YOU HAVE SAVED THE DAY!'
+        elif self.score < DEATH_BLOSSOM_REQUIRED_SCORE:
+            instruction_text = 'ACHIEVE 5 POINTS TO UNLOCK DEATH BLOSSOM'
+        elif self.score >= DEATH_BLOSSOM_REQUIRED_SCORE:
+            instruction_text = 'HOLD SHIFT TO DEPLOY DEATH BLOSSOM!'
+        start_x = SCREEN_WIDTH / 3
+        start_y = SCREEN_HEIGHT - 20
+        arcade.draw_text(instruction_text, start_x=start_x, start_y=start_y,
+                         font_size=12, color=arcade.color.RED)
+
     def check_collision(self):
+        """
+        Run through all the flying objects in the game and check
+        to see if any of them have collided
+        :return:
+        """
         for rock in self.rocks:
             if self._has_collided(rock, self.ship):
                 self.ship.kill()
@@ -94,18 +133,29 @@ class Game(arcade.Window):
                     debris = rock.break_apart()
                     self.rocks.extend(debris)
                     bullet.kill()
+                    self. score += 1
 
     def _has_collided(self, obj1, obj2):
+        """
+        Decide whether or not two flying objects have collided with each other
+        :param obj1: FlyingObject
+        :param obj2: FlyingObject
+        :return:
+        """
         if obj1.alive and obj2.alive:
             too_close = obj1.radius + obj2.radius
 
             if (abs(obj1.center.x - obj2.center.x) < too_close and
-                        abs(obj1.center.y - obj2.center.y) < too_close):
+                    abs(obj1.center.y - obj2.center.y) < too_close):
                 # its a hit!
                 return True
         return False
 
     def clear_zombies(self):
+        """
+        Remove all flying objects from the game that are no longer alive
+        :return:
+        """
         for bullet in self.bullets:
             if not bullet.alive:
                 self.bullets.remove(bullet)
@@ -131,9 +181,8 @@ class Game(arcade.Window):
             self.ship.apply_thrust(-1)
 
         # Machine gun mode...
-        #if arcade.key.SPACE in self.held_keys:
-        #    pass
-
+        # if arcade.key.SPACE in self.held_keys:
+        #     pass
 
     def on_key_press(self, key: int, modifiers: int):
         """
@@ -143,7 +192,18 @@ class Game(arcade.Window):
         if self.ship.alive:
             self.held_keys.add(key)
 
-            if key == arcade.key.SPACE:
+            # Fire death blossom
+            if (key == arcade.key.SPACE and
+                    modifiers == arcade.key.MOD_SHIFT and
+                    self.score >= DEATH_BLOSSOM_REQUIRED_SCORE):
+                death_blossom = DeathBlossom(Point(x=self.ship.center.x, y=self.ship.center.y),
+                                             Velocity(dx=self.ship.velocity.dx, dy=self.ship.velocity.dy),
+                                             angle=self.ship.angle)
+                self.bullets.append(death_blossom)
+                self.score -= DEATH_BLOSSOM_REQUIRED_SCORE
+
+            # Fire bullet
+            elif key == arcade.key.SPACE:
                 # TODO: Fire the bullet here!
                 bullet = Bullet(Point(x=self.ship.center.x, y=self.ship.center.y),
                                 Velocity(dx=self.ship.velocity.dx, dy=self.ship.velocity.dy),

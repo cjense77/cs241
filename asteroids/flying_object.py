@@ -8,6 +8,7 @@ from point import Point
 from velocity import Velocity
 from abc import ABC
 from abc import abstractmethod
+import arcade
 
 
 class FlyingObject(ABC):
@@ -17,10 +18,10 @@ class FlyingObject(ABC):
     def __init__(self, center=Point(), velocity=Velocity(), radius=10, angle=0):
         """
         Initialize flying object
-        :param x:
-        :param y:
-        :param dx:
-        :param dy:
+        :param center: Point object
+        :param velocity: Velocity object
+        :param radius: int
+        :param angle: int in degrees
         """
         self._center = center
         self._velocity = velocity
@@ -80,6 +81,7 @@ class FlyingObject(ABC):
         self.center.y += self.velocity.dy
         self.angle += self.velocity.da
 
+        # Handle objects that go off the screen
         self.wrap(screen_width, screen_height)
 
     def is_off_screen(self, screen_width, screen_height):
@@ -98,6 +100,13 @@ class FlyingObject(ABC):
             return False
 
     def wrap(self, screen_width, screen_height):
+        """
+        If a FlyingObject has moved off the screen, wrap it around to the
+        other side of the screen.
+        :param screen_width: int
+        :param screen_height: int
+        :return:
+        """
         if self.is_off_screen(screen_width, screen_height):
             if self.center.x < 0:
                 self.center.x = screen_width
@@ -109,8 +118,25 @@ class FlyingObject(ABC):
                 self.center.y = 0
 
     def kill(self):
+        """
+        Set the FlyingObject's alive status to False
+        :return:
+        """
         self.alive = False
 
-    @abstractmethod
-    def draw(self):
-        pass
+    def draw(self, image, angle='unset'):
+        if angle == 'unset':
+            angle = self.angle
+
+        imgage = image
+        texture = arcade.load_texture(imgage)
+
+        width = texture.width
+        height = texture.height
+
+        arcade.draw_texture_rectangle(self.center.x,
+                                      self.center.y,
+                                      width,
+                                      height,
+                                      texture,
+                                      angle)

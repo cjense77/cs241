@@ -6,13 +6,14 @@ Contains class to store a moving object's velocity
 
 class Velocity:
     """
-    Class to store x and y compnent of velocity
+    Class to store x, y, and angular components of velocity
     """
     def __init__(self, dx=0, dy=0, da=0):
         """
-        Initialize velocity
-        :param dx:
-        :param dy:
+        Initialize Velocity object
+        :param dx: int
+        :param dy: int
+        :param da: int angular velocity in degrees/frame
         """
         self.dx = dx
         self.dy = dy

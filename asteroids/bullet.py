@@ -17,34 +17,37 @@ class Bullet(FlyingObject):
     """
     Class for a bullet in a shooting game
     """
-    def __init__(self, center, velocity, angle=0):
+    def __init__(self, center, velocity, angle=0, radius=BULLET_RADIUS):
         """
-        Initialize bullet
+        Initialize a Bullet object
+        :param center: Point object
+        :param velocity: Velocity object
+        :param angle: int angle in degrees
         """
-        super().__init__(center=center, velocity=velocity, angle=angle)
+        super().__init__(center=center,
+                         velocity=velocity,
+                         angle=angle,
+                         radius=radius)
         self.life = BULLET_LIFE
 
         self.fire()
 
-    def draw(self):
+    def draw(self, image='unset'):
         """
         Draw a bullet from an image file
         :return:
         """
-        image = 'images/laserBlue01.png'
-        texture = arcade.load_texture(image)
-
-        width = texture.width
-        height = texture.height
-
-        arcade.draw_texture_rectangle(self.center.x,
-                                      self.center.y,
-                                      width,
-                                      height,
-                                      texture,
-                                      self.angle)
+        if image == 'unset':
+            image = 'images/laserBlue01.png'
+        super().draw(image)
 
     def advance(self, screen_width, screen_height):
+        """
+        Advance a Bullet object across the screen
+        :param screen_width: int
+        :param screen_height: int
+        :return:
+        """
         super().advance(screen_width, screen_height)
 
         self.life -= 1
