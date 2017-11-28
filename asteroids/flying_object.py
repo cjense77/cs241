@@ -7,7 +7,6 @@ Contains an abstract class for a flying object in an arcade game
 from point import Point
 from velocity import Velocity
 from abc import ABC
-from abc import abstractmethod
 import arcade
 
 

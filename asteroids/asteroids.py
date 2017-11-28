@@ -111,7 +111,7 @@ class Game(arcade.Window):
             instruction_text = 'ACHIEVE 5 POINTS TO UNLOCK DEATH BLOSSOM'
         elif self.score >= DEATH_BLOSSOM_REQUIRED_SCORE:
             instruction_text = 'HOLD SHIFT TO DEPLOY DEATH BLOSSOM!'
-        start_x = SCREEN_WIDTH / 3
+        start_x = 100
         start_y = SCREEN_HEIGHT - 20
         arcade.draw_text(instruction_text, start_x=start_x, start_y=start_y,
                          font_size=12, color=arcade.color.RED)
